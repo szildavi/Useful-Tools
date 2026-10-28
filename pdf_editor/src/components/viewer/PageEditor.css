@@ -1,0 +1,456 @@
+.page-editor {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr) auto;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---- filmstrip ---- */
+
+.filmstrip {
+  border-right: 1px solid var(--border-subtle);
+  background: var(--surface-panel);
+  overflow-y: auto;
+}
+
+.filmstrip__list {
+  margin: 0;
+  padding: 12px 10px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filmstrip__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 5px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-small);
+  background: transparent;
+}
+
+.filmstrip__item:hover {
+  background: var(--surface-raised);
+}
+
+.filmstrip__item--active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.filmstrip__thumbnail {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1 / 1.414;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: #ffffff;
+}
+
+.filmstrip__number {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- main editing area ---- */
+
+.page-editor__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.page-editor__bar {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface-panel);
+  flex-wrap: wrap;
+}
+
+.page-editor__position {
+  margin-left: auto;
+  padding-top: 8px;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.page-editor__work-area {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 24px;
+  overflow: auto;
+  background: var(--surface-page);
+}
+
+.page-editor__error {
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.page-editor__page {
+  position: relative;
+  background: #ffffff;
+  box-shadow: var(--shadow-overlay);
+  touch-action: none;
+}
+
+.page-editor__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+.page-editor__page--draw {
+  cursor: crosshair;
+}
+
+.page-editor__page--add-text {
+  cursor: crosshair;
+}
+
+.page-editor__page--edit-text {
+  cursor: text;
+}
+
+.page-editor__page--select {
+  cursor: default;
+}
+
+/* ---- annotation overlay ---- */
+
+.annotation-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/*
+ * One stacking context per edit, ordered by the page's own annotation order, so
+ * the layer order on screen is the order the exporter paints in.
+ */
+.annotation-layer__item {
+  position: absolute;
+  inset: 0;
+}
+
+.annotation-drawing {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/*
+ * Text is deliberately NOT clipped to its box. If it does not fit, it flows
+ * past the box exactly as the exporter writes it, so the preview always matches
+ * the exported file and no wording is ever silently lost. The layer above clips
+ * at the page edge, which is what the PDF itself does.
+ *
+ * `overflow-wrap: normal` matches TextLineWrapper, which leaves a word that
+ * cannot fit on a line of its own overflowing rather than splitting it.
+ */
+.annotation-text {
+  position: absolute;
+  display: block;
+  overflow: visible;
+  white-space: pre-wrap;
+  overflow-wrap: normal;
+}
+
+/* Only the line breaks the user typed break the line, matching the exporter. */
+.annotation-text--single-line {
+  white-space: pre;
+}
+
+.annotation-text--selected {
+  outline: 1.5px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ---- hints for clickable existing text ---- */
+
+.text-hints {
+  position: absolute;
+  inset: 0;
+}
+
+.text-hints__line {
+  position: absolute;
+  border-radius: 2px;
+  background: rgba(21, 112, 239, 0.09);
+  box-shadow: inset 0 0 0 1px rgba(21, 112, 239, 0.25);
+}
+
+/* ---- tool palette ---- */
+
+.tool-palette {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tool-palette__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tool-palette__divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 2px;
+  background: var(--border-subtle);
+}
+
+.tool-palette__hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.tool-palette__select {
+  padding: 7px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-small);
+  background: var(--surface-panel);
+  font-size: 13px;
+}
+
+.tool-palette__stroke-preview {
+  display: block;
+  width: 16px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.tool-palette__swatches {
+  display: flex;
+  gap: 4px;
+}
+
+.tool-palette__swatch {
+  width: 22px;
+  height: 22px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(16, 24, 40, 0.12);
+}
+
+.tool-palette__swatch--selected {
+  border-color: var(--text-primary);
+}
+
+/* ---- inspector ---- */
+
+.page-editor__side {
+  display: flex;
+  flex-direction: column;
+  width: 276px;
+  border-left: 1px solid var(--border-subtle);
+  background: var(--surface-panel);
+  overflow-y: auto;
+}
+
+.inspector {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.inspector__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.inspector__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.inspector__original {
+  margin: 0 0 14px;
+  padding: 8px 10px;
+  border-radius: var(--radius-small);
+  background: var(--surface-raised);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.inspector__field {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.inspector__label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+  font-weight: 550;
+  color: var(--text-secondary);
+}
+
+.inspector__help {
+  margin: 0 0 6px;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.inspector__textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-small);
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.inspector__number {
+  width: 88px;
+  padding: 7px 9px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-small);
+  font-size: 13px;
+}
+
+.inspector__textarea:focus-visible,
+.inspector__number:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  border-color: var(--accent);
+}
+
+.inspector__swatches {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.inspector__note {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.inspector__remove {
+  width: 100%;
+}
+
+/* ---- layers ---- */
+
+.layers {
+  padding: 16px;
+}
+
+.layers__title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.layers__empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.layers__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.layers__item {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-small);
+}
+
+.layers__item:hover {
+  background: var(--surface-raised);
+}
+
+.layers__select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border: none;
+  border-radius: var(--radius-small);
+  background: transparent;
+  text-align: left;
+}
+
+.layers__select--active {
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.layers__swatch {
+  flex-shrink: 0;
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(16, 24, 40, 0.18);
+}
+
+.layers__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12.5px;
+}
+
+.layers__actions {
+  display: flex;
+  flex-shrink: 0;
+  padding-right: 4px;
+}
+
+.layers__actions .button {
+  min-width: 26px;
+  padding: 3px 5px;
+  font-size: 12px;
+}
+
+@media (max-width: 900px) {
+  .page-editor {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .page-editor__side {
+    display: none;
+  }
+}

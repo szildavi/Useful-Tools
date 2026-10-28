@@ -1,0 +1,45 @@
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+**/.claude/settings.local.json
+*.local
+*.local.*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+ENV/
+
+# JavaScript and TypeScript
+**/node_modules/
+**/dist/
+**/dist-ssr/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+**/build/
+*.spec
+
+# Logs and user-generated test data
+*.log
+**/test/*.pdf
+**/test/*.mp4
+**/test/*.mov
+**/test/*.wav
+**/test/output/

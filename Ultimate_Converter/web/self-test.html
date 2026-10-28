@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ultimate Converter - browser self-test</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      body {
+        padding: 24px clamp(16px, 4vw, 32px);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 16px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 6px 12px;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.9rem;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .pass {
+        color: var(--success);
+        font-weight: 600;
+      }
+      .fail {
+        color: var(--danger);
+        font-weight: 600;
+      }
+      .detail {
+        color: var(--muted);
+        font-family: ui-monospace, monospace;
+        font-size: 0.82rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Browser self-test</h1>
+    <p class="card__hint">
+      Runs every conversion the website offers against generated sample files, through the same
+      worker pool the real page uses.
+    </p>
+    <h2 id="summary">Running…</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Conversion</th>
+          <th>Result</th>
+          <th>Output</th>
+        </tr>
+      </thead>
+      <tbody id="results"></tbody>
+    </table>
+    <script type="module" src="js/self-test.js"></script>
+  </body>
+</html>

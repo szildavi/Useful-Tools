@@ -1,0 +1,26 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.app__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.app__drop-hint {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(21, 112, 239, 0.08);
+  border: 3px dashed var(--accent);
+  color: #0e5fd8;
+  font-size: 17px;
+  font-weight: 600;
+  pointer-events: none;
+  z-index: 40;
+}

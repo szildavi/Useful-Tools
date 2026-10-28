@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ultimate Converter</title>
+    <meta
+      name="description"
+      content="Convert files in your browser. Nothing is uploaded - every conversion runs on your own machine."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🔄</text></svg>"
+    />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-header__title">
+        <h1>Ultimate Converter</h1>
+        <p class="app-header__subtitle" id="capability-summary">Checking what this browser can do…</p>
+      </div>
+      <button type="button" class="button" id="formats-button">Supported formats</button>
+    </header>
+
+    <main class="layout">
+      <section class="layout__queue">
+        <div class="drop-zone" id="drop-zone" tabindex="0" role="button">
+          <p class="drop-zone__headline">Drop files here</p>
+          <p class="drop-zone__detail">or click to choose them — nothing leaves your computer</p>
+          <input type="file" id="file-input" multiple hidden />
+        </div>
+
+        <div class="queue" id="queue" hidden>
+          <div class="queue__toolbar">
+            <span class="queue__count" id="queue-count"></span>
+            <div class="queue__actions">
+              <button type="button" class="button" id="add-more-button">Add more</button>
+              <button type="button" class="button" id="clear-button">Clear</button>
+              <button type="button" class="button" id="download-all-button" hidden>
+                Download all
+              </button>
+              <button type="button" class="button button--accent" id="convert-button">
+                Convert all
+              </button>
+            </div>
+          </div>
+          <ul class="queue__list" id="queue-list"></ul>
+        </div>
+      </section>
+
+      <aside class="layout__sidebar">
+        <section class="card">
+          <h2 class="card__title">Convert to</h2>
+          <div id="target-format-container">
+            <p class="card__hint" id="selection-hint">Select a file to change its settings.</p>
+          </div>
+        </section>
+
+        <section class="card card--grow">
+          <h2 class="card__title">Settings</h2>
+          <div id="options-container">
+            <p class="card__hint">Nothing selected.</p>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="card__title">Parallel conversions</h2>
+          <label class="field">
+            <span class="field__label" id="worker-count-label"></span>
+            <input type="range" id="worker-count" min="1" max="16" step="1" />
+          </label>
+          <p class="card__hint">
+            Files are converted at the same time, matched to your processor's cores.
+          </p>
+        </section>
+      </aside>
+    </main>
+
+    <dialog class="dialog" id="formats-dialog">
+      <div class="dialog__header">
+        <h2 id="formats-dialog-title">Supported formats</h2>
+        <button type="button" class="button" id="formats-close-button">Close</button>
+      </div>
+      <div class="dialog__body" id="formats-dialog-body"></div>
+    </dialog>
+
+    <footer class="app-footer">
+      <p>
+        Every conversion runs inside this page. For video encoding, RAW photos, office documents
+        and e-books, use the desktop application in the <code>app/</code> folder.
+      </p>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

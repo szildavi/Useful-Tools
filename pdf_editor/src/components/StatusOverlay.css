@@ -1,0 +1,59 @@
+.status-overlay {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--surface-inverse);
+  color: #ffffff;
+  font-size: 13px;
+  box-shadow: var(--shadow-overlay);
+  z-index: 50;
+}
+
+.status-overlay__spinner {
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: status-spin 700ms linear infinite;
+}
+
+@keyframes status-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status-error {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(560px, calc(100vw - 48px));
+  padding: 10px 10px 10px 18px;
+  border: 1px solid #fda29b;
+  border-radius: var(--radius-medium);
+  background: var(--danger-soft);
+  box-shadow: var(--shadow-overlay);
+  z-index: 51;
+}
+
+.status-error__message {
+  color: #912018;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.status-error__dismiss {
+  flex-shrink: 0;
+  color: #912018;
+}

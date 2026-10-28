@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Code Generator</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app__header">
+      <h1>QR Code Generator</h1>
+      <p>Design a QR code, drop your logo on it and export it in print quality.</p>
+    </header>
+
+    <main class="app__layout">
+      <form id="controls" class="panel" autocomplete="off">
+
+        <fieldset class="field-group">
+          <legend>Content</legend>
+          <label class="field">
+            <span class="field__label">Link or text</span>
+            <textarea id="content" rows="3" placeholder="https://example.com">https://example.com</textarea>
+          </label>
+        </fieldset>
+
+        <fieldset class="field-group">
+          <legend>Code</legend>
+          <div class="field-row">
+            <label class="field">
+              <span class="field__label">Error correction</span>
+              <select id="errorCorrection">
+                <option value="L">L — 7% recoverable</option>
+                <option value="M" selected>M — 15% recoverable</option>
+                <option value="Q">Q — 25% recoverable</option>
+                <option value="H">H — 30% recoverable</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field__label">Export size</span>
+              <input id="outputSize" type="number" min="64" max="8192" step="16" value="1024">
+            </label>
+          </div>
+          <label class="field">
+            <span class="field__label">Quiet zone <output data-value-for="quietZone" data-suffix=" modules"></output></span>
+            <input id="quietZone" type="range" min="0" max="12" step="1" value="4">
+          </label>
+          <label class="field field--inline">
+            <input id="boostErrorCorrection" type="checkbox" checked>
+            <span>Raise error correction automatically when there is spare room</span>
+          </label>
+        </fieldset>
+
+        <fieldset class="field-group">
+          <legend>Shapes</legend>
+          <div class="field-row">
+            <label class="field">
+              <span class="field__label">Modules</span>
+              <select id="moduleShape"></select>
+            </label>
+            <label class="field">
+              <span class="field__label">Corner frame</span>
+              <select id="eyeFrameShape"></select>
+            </label>
+            <label class="field">
+              <span class="field__label">Corner centre</span>
+              <select id="eyeBallShape"></select>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field-group">
+          <legend>Colours</legend>
+          <div class="field-row">
+            <label class="field">
+              <span class="field__label">Pattern style</span>
+              <select id="foregroundType">
+                <option value="solid" selected>Solid colour</option>
+                <option value="gradient">Gradient</option>
+              </select>
+            </label>
+            <label class="field field--color">
+              <span class="field__label">Pattern</span>
+              <input id="foregroundColor" type="color" value="#101828">
+            </label>
+            <label class="field field--color">
+              <span class="field__label">Background</span>
+              <input id="backgroundColor" type="color" value="#ffffff">
+            </label>
+          </div>
+
+          <div id="gradientControls" class="field-row" hidden>
+            <label class="field field--color">
+              <span class="field__label">Gradient end</span>
+              <input id="foregroundColorEnd" type="color" value="#6d28d9">
+            </label>
+            <label class="field">
+              <span class="field__label">Angle <output data-value-for="foregroundAngle" data-suffix="°"></output></span>
+              <input id="foregroundAngle" type="range" min="0" max="360" step="5" value="45">
+            </label>
+          </div>
+
+          <label class="field field--inline">
+            <input id="backgroundTransparent" type="checkbox">
+            <span>Transparent background (PNG and SVG only)</span>
+          </label>
+          <label class="field field--inline">
+            <input id="customEyeColors" type="checkbox">
+            <span>Give the three corners their own colours</span>
+          </label>
+
+          <div id="eyeColorControls" class="field-row" hidden>
+            <label class="field field--color">
+              <span class="field__label">Corner frame</span>
+              <input id="eyeFrameColor" type="color" value="#101828">
+            </label>
+            <label class="field field--color">
+              <span class="field__label">Corner centre</span>
+              <input id="eyeBallColor" type="color" value="#6d28d9">
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field-group">
+          <legend>Logo</legend>
+          <div class="logo-picker">
+            <label class="button button--ghost">
+              Choose image
+              <input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" hidden>
+            </label>
+            <span id="logoFileName" class="logo-picker__name">No logo selected</span>
+            <button id="removeLogo" type="button" class="button button--quiet">Remove</button>
+          </div>
+
+          <div id="logoControls" hidden>
+            <label class="field">
+              <span class="field__label">Size <output data-value-for="logoSize" data-suffix="% of the code"></output></span>
+              <input id="logoSize" type="range" min="5" max="40" step="1" value="20">
+            </label>
+            <label class="field">
+              <span class="field__label">Clear space <output data-value-for="logoPadding" data-suffix=" modules"></output></span>
+              <input id="logoPadding" type="range" min="0" max="6" step="1" value="1">
+            </label>
+            <div class="field-row">
+              <label class="field field--inline">
+                <input id="logoBackdrop" type="checkbox" checked>
+                <span>Plate behind the logo</span>
+              </label>
+              <label class="field field--color">
+                <span class="field__label">Plate colour</span>
+                <input id="logoBackdropColor" type="color" value="#ffffff">
+              </label>
+            </div>
+            <label class="field">
+              <span class="field__label">Plate rounding <output data-value-for="logoCornerRadius" data-suffix="%"></output></span>
+              <input id="logoCornerRadius" type="range" min="0" max="50" step="1" value="15">
+            </label>
+          </div>
+        </fieldset>
+      </form>
+
+      <section class="panel preview">
+        <div id="previewFrame" class="preview__frame">
+          <canvas id="preview" aria-label="QR code preview"></canvas>
+        </div>
+
+        <p id="message" class="preview__message" hidden></p>
+        <p id="details" class="preview__details"></p>
+        <ul id="warnings" class="preview__warnings"></ul>
+
+        <div class="preview__export">
+          <label class="field">
+            <span class="field__label">File name</span>
+            <input id="fileName" type="text" value="qr-code" spellcheck="false">
+          </label>
+          <div class="preview__buttons">
+            <button id="downloadPng" type="button" class="button">PNG</button>
+            <button id="downloadJpg" type="button" class="button">JPG</button>
+            <button id="downloadSvg" type="button" class="button">SVG</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/core/BitBuffer.js"></script>
+  <script src="js/core/GaloisField256.js"></script>
+  <script src="js/core/ReedSolomonEncoder.js"></script>
+  <script src="js/core/ErrorCorrectionLevel.js"></script>
+  <script src="js/core/QrMode.js"></script>
+  <script src="js/core/QrVersionTable.js"></script>
+  <script src="js/core/QrSegment.js"></script>
+  <script src="js/core/QrSegmentEncoder.js"></script>
+  <script src="js/core/QrCodewordBuilder.js"></script>
+  <script src="js/core/QrMaskPattern.js"></script>
+  <script src="js/core/QrPenaltyScorer.js"></script>
+  <script src="js/core/QrMatrix.js"></script>
+  <script src="js/core/QrMatrixBuilder.js"></script>
+  <script src="js/core/QrCodeGenerator.js"></script>
+
+  <script src="js/render/PathGeometry.js"></script>
+  <script src="js/render/ShapeRegistry.js"></script>
+  <script src="js/render/ColorFill.js"></script>
+  <script src="js/render/ModuleShape.js"></script>
+  <script src="js/render/EyeShape.js"></script>
+  <script src="js/render/QrRenderOptions.js"></script>
+  <script src="js/render/QrPathBuilder.js"></script>
+  <script src="js/render/QrRenderer.js"></script>
+  <script src="js/render/CanvasQrRenderer.js"></script>
+  <script src="js/render/SvgPaintCollection.js"></script>
+  <script src="js/render/SvgQrRenderer.js"></script>
+
+  <script src="js/export/FileDownloader.js"></script>
+  <script src="js/export/QrExporter.js"></script>
+
+  <script src="js/app/ColorContrast.js"></script>
+  <script src="js/app/LogoImageLoader.js"></script>
+  <script src="js/app/ScanSafetyAdvisor.js"></script>
+  <script src="js/app/QrFormReader.js"></script>
+  <script src="js/app/QrStudioApp.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
